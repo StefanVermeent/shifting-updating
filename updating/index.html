@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <title>Cognitive Tasks</title>
+    <script src="https://unpkg.com/jspsych@7.3.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-animation@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script>
+
+    <script src="3-updating-standard/1-updating-standard-practice.js"></script>
+    <script src="3-updating-standard/2-updating-standard.js"></script>
+    <script src="3-updating-standard/3-updating-standard-end.js"></script>
+    <script src="4-updating-objects/1-updating-objects-practice.js"></script>
+    <script src="4-updating-objects/2-updating-objects.js"></script>
+    <script src="4-updating-objects/3-updating-objects-end.js"></script>
+
+    <link href="https://unpkg.com/jspsych@7.3.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+  // General variables
+var fullscreenmode = {
+  type: jsPsychFullscreen,
+  fullscreen_mode: true
+};
+
+var cursor_off = {
+    type: jsPsychCallFunction,
+    func: function() {
+        document.body.style.cursor= "none";
+    }
+};
+
+var cursor_on = {
+    type: jsPsychCallFunction,
+    func: function() {
+        document.body.style.cursor= "auto";
+    }
+};
+
+// START OF TIMELINE
+  timeline_start = [
+    fullscreenmode
+  ]
+
+
+ // SHUFFLE SHIFTING ORDER
+
+ updating_eco = [
+    updating_standard_instructions,
+    updating_standard_practice_loop,
+    updating_standard_practice_finish,
+    updating_standard,
+    updating_standard_end
+    ]
+
+  updating_abs = [
+    updating_ecological_instructions,
+    updating_ecological_practice_loop,
+    updating_ecological_practice_finish,
+    updating_ecological,
+    updating_ecological_end
+    ]
+
+
+
+var test_order1 = [
+    {type: jsPsychCallFunction, func: function(){jsPsych.data.addProperties({counterbalance: 1})}},
+    timeline_start, updating_eco, updating_abs
+  ].flat(2)
+
+var test_order2 = [
+    {type: jsPsychCallFunction, func: function(){jsPsych.data.addProperties({counterbalance: 2})}},
+    timeline_start, updating_abs, updating_eco
+  ].flat(2)
+
+
+var jsPsych = initJsPsych();
+
+counterbalance = jsPsych.randomization.sampleWithoutReplacement([test_order1, test_order2], 1).flat(2)
+
+
+var timeline = counterbalance
+
+jsPsych.run(timeline);
+</script>
+</html>
